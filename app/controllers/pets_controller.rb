@@ -1,6 +1,7 @@
 class PetsController < ApplicationController
   wrap_parameters format: []
   rescue_from ActiveRecord::RecordNotFound, with: :render_not_found_response
+  rescue_from ActiveRecord::RecordInvalid, with: :render_unprocessable_entity_response
 
   def index
     pets = Pet.all
@@ -13,13 +14,13 @@ class PetsController < ApplicationController
   end
 
   def create
-    pet = Pet.create(pet_params)
+    pet = Pet.create!(pet_params)
     render json: pet, status: :created
   end
 
   def update
     pet = find_pet
-    pet.update(pet_params)
+    pet.update!(pet_params)
     render json: pet, status: :accepted
   end
 
@@ -41,5 +42,9 @@ class PetsController < ApplicationController
 
   def render_not_found_response
     render json: { error: "Pet not found" }, status: :not_found
+  end
+
+  def render_unprocessable_entity_response(invalid)
+    render json: { errors: invalid.record.errors.full_messages }, status: :unprocessable_entity
   end
 end

@@ -1,6 +1,7 @@
 class SheltersController < ApplicationController
   wrap_parameters format: []
   rescue_from ActiveRecord::RecordNotFound, with: :render_not_found_response
+  rescue_from ActiveRecord::RecordInvalid, with: :render_unprocessable_entity_response
 
   def index
     shelter = Shelter.all
@@ -13,13 +14,13 @@ class SheltersController < ApplicationController
   end
 
   def create
-    shelter = Shelter.create(shelter_params)
+    shelter = Shelter.create!(shelter_params)
     render json: shelter, status: :created
   end
 
   def update
     shelter = find_shelter
-    shelter.update(shelter_params)
+    shelter.update!(shelter_params)
     render json: shelter, status: :accepted
   end
 
@@ -41,5 +42,9 @@ class SheltersController < ApplicationController
 
   def render_not_found_response
     render json: { error: "Shelter not found" }, status: :not_found
+  end
+
+  def render_unprocessable_entity_response(invalid)
+    render json: { errors: invalid.record.errors.full_messages }, status: :unprocessable_entity
   end
 end
