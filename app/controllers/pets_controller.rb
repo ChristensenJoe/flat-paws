@@ -19,7 +19,7 @@ class PetsController < ApplicationController
   def update
     pet = find_pet
     pet.update(pet_params)
-    render json: pet
+    render json: pet, status: :accepted
   end
 
   def destroy

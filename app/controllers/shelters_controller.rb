@@ -19,7 +19,7 @@ class SheltersController < ApplicationController
   def update
     shelter = find_shelter
     shelter.update(shelter_params)
-    render json: shelter
+    render json: shelter, status: :accepted
   end
 
   def destroy
