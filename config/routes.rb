@@ -1,4 +1,4 @@
 Rails.application.routes.draw do
-  resources :pets, only: [:index, :show]
-  resources :shelters, only: [:index, :show]
+  resources :pets
+  resources :shelters
 end

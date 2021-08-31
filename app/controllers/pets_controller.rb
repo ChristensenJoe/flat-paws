@@ -11,7 +11,28 @@ class PetsController < ApplicationController
     render json: pet
   end
 
+  def create
+    pet = Pet.create(pet_params)
+    render json: pet, status: :created
+  end
+
+  def update
+    pet = find_pet
+    pet.update(pet_params)
+    render json: pet
+  end
+
+  def destroy
+    pet = find_pet
+    pet.destroy
+    head :no_content
+  end
+
   private
+
+  def pet_params
+    params.permit(:name, :breed, :age, :weight, :gps_chip, :shelter_id)
+  end
 
   def find_pet
     Pet.find(params[:id])

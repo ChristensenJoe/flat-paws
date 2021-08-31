@@ -11,7 +11,28 @@ class SheltersController < ApplicationController
     render json: shelter
   end
 
+  def create
+    shelter = Shelter.create(shelter_params)
+    render json: shelter, status: :created
+  end
+
+  def update
+    shelter = find_shelter
+    shelter.update(shelter_params)
+    render json: shelter
+  end
+
+  def destroy
+    shelter = find_shelter
+    shelter.destroy
+    head :no_content
+  end
+
   private
+
+  def shelter_params
+    params.permit(:name, :location, :capacity)
+  end
 
   def find_shelter
     Shelter.find(params[:id])
