@@ -1,4 +1,5 @@
 class SheltersController < ApplicationController
+  wrap_parameters format: []
   rescue_from ActiveRecord::RecordNotFound, with: :render_not_found_response
 
   def index
